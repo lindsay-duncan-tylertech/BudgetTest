@@ -12,6 +12,8 @@ namespace BudgetTestServer.Data
         {
         }
 
+        public DbSet<LegalEntity> LegalEntity { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

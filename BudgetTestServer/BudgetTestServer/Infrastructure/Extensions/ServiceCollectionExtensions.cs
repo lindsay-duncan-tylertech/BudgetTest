@@ -1,5 +1,7 @@
 ﻿using BudgetTestServer.Data;
 using BudgetTestServer.Data.Models;
+using BudgetTestServer.Features.LegalEntities;
+using BudgetTestServer.Infrastructure.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +41,20 @@ namespace BudgetTestServer.Infrastructure.Extensions
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new System.Version(8, 0, 22))));
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddTransient<ILegalEntityService, LegalEntityService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddApiControllers(this IServiceCollection services)
+        {
+            services.AddControllers(options => options.Filters.Add<ModelOrNotFoundActionFilter>());
 
             return services;
         }
