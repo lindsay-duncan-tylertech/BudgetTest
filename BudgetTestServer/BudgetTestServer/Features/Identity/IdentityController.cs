@@ -1,4 +1,5 @@
-﻿using BudgetTestServer.Data.Models;
+﻿using AutoMapper;
+using BudgetTestServer.Data.Models;
 using BudgetTestServer.Features.Identity.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,10 +11,12 @@ namespace BudgetTestServer.Features.Identity
     public class IdentityController : ApiController
     {
         private readonly UserManager<User> userManager;
+        private readonly IMapper mapper;
 
-        public IdentityController(UserManager<User> userManager)
+        public IdentityController(UserManager<User> userManager, IMapper mapper)
         {
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -22,13 +25,7 @@ namespace BudgetTestServer.Features.Identity
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Register(RegisterUserRequestModel model)
         {
-            var user = new User
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                UserName = model.UserName
-            };
+            var user = mapper.Map<User>(model);
 
             var result = await this.userManager.CreateAsync(user, model.Password);
 
@@ -59,13 +56,9 @@ namespace BudgetTestServer.Features.Identity
                 return Unauthorized();
             }
 
-            return new LoginResponseModel
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserName = user.UserName,
-                Email = user.Email
-            };
+            var responseModel = mapper.Map<LoginResponseModel>(user);
+
+            return responseModel;
         }
     }
 }

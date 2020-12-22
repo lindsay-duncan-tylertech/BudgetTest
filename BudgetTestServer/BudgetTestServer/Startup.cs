@@ -1,3 +1,4 @@
+using AutoMapper;
 using BudgetTestServer.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace BudgetTestServer
                 .AddIdentity()
                 .AddApplicationServices()
                 .AddSwagger()
+                .AddAutoMapper(typeof(Startup))
                 .AddApiControllers();
         }
 

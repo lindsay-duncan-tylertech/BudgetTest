@@ -1,4 +1,5 @@
-﻿using BudgetTestServer.Data;
+﻿using AutoMapper;
+using BudgetTestServer.Data;
 using BudgetTestServer.Data.Models;
 using BudgetTestServer.Features.LegalEntities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +12,17 @@ namespace BudgetTestServer.Features.LegalEntities
     public class LegalEntityService : ILegalEntityService
     {
         private readonly ApplicationDbContext data;
+        private readonly IMapper mapper;
 
-        public LegalEntityService(ApplicationDbContext data)
+        public LegalEntityService(ApplicationDbContext data, IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper;
         }
 
         public async Task<int> Create(CreateLegalEntityRequestModel model)
         {
-            var legalEntity = new LegalEntity
-            {
-                Description = model.Description,
-                RegulatoryId = model.RegulatoryId
-            };
+            var legalEntity = mapper.Map<LegalEntity>(model);
 
             this.data.Add(legalEntity);
 
@@ -34,7 +33,7 @@ namespace BudgetTestServer.Features.LegalEntities
 
         public async Task<bool> Delete(int id)
         {
-            var legalEntity = await this.GetLegalEntityById(id);
+            var legalEntity = await this.data.LegalEntity.FindAsync(id);
 
             if (legalEntity == null)
             {
@@ -51,12 +50,7 @@ namespace BudgetTestServer.Features.LegalEntities
         public async Task<IEnumerable<LegalEntityServiceModel>> GetAll()
         {
             return await this.data.LegalEntity
-                .Select(e => new LegalEntityServiceModel
-                {
-                    Id = e.Id,
-                    Description = e.Description,
-                    RegulatoryId = e.RegulatoryId
-                })
+                .Select(e => mapper.Map<LegalEntityServiceModel>(e))
                 .ToListAsync();
         }
 
@@ -64,18 +58,13 @@ namespace BudgetTestServer.Features.LegalEntities
         {
             return await this.data.LegalEntity
                 .Where(e => e.Id == id)
-                .Select(e => new LegalEntityServiceModel
-                {
-                    Id = e.Id,
-                    Description = e.Description,
-                    RegulatoryId = e.RegulatoryId
-                })
+                .Select(e => mapper.Map<LegalEntityServiceModel>(e))
                 .FirstOrDefaultAsync();
         }
 
         public async Task<bool> Update(int id, UpdateLegalEntityRequestModel model)
         {
-            var legalEntity = await this.GetLegalEntityById(id);
+            var legalEntity = await this.data.LegalEntity.FindAsync(id);
 
             if (legalEntity == null)
             {
@@ -97,11 +86,5 @@ namespace BudgetTestServer.Features.LegalEntities
             return true;
         }
 
-        private async Task<LegalEntity> GetLegalEntityById(int id)
-        {
-            return await this.data.LegalEntity
-                .Where(e => e.Id == id)
-                .FirstOrDefaultAsync();
-        }
     }
 }
