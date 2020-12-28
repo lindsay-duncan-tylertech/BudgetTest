@@ -8,17 +8,19 @@ import { User } from '../models/User';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  user: User;
   message: string;
 
-  currentUser: User;
-
   constructor(private authService: AuthService){
-    this.authService.currentUser.subscribe(user => this.currentUser = user);
   }
 
   ngOnInit(): void {
-    this.message = `Welcome, ${this.currentUser.firstName}`;
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.message = `Welcome, ${this.user?.firstName}`;
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
   }
 
 }

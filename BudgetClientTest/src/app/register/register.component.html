@@ -6,57 +6,57 @@
       <form [formGroup]="registerForm"
             (ngSubmit)="register()">
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="firstName">First name</label>
           <input type="text"
                  class="form-control"
                  formControlName="firstName">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="firstName.touched && firstName.errors?.required">
           This field is required
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="lastName">Last name</label>
           <input type="text"
                  class="form-control"
                  formControlName="lastName">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="lastName.touched && lastName.errors?.required">
           This field is required
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="userName">Username</label>
           <input type="text"
                  class="form-control"
                  formControlName="userName">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="userName.touched && userName.errors?.required">
           This field is required
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="email">Email</label>
           <input type="email"
                  class="form-control"
                  formControlName="email">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="email.touched && email.errors?.required">
           This field is required
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="password">Password</label>
           <input type="password"
                  class="form-control"
                  formControlName="password">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="password.touched && password.errors?.required">
           This field is required
         </div>

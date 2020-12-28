@@ -10,8 +10,7 @@ export class AuthGuardService implements CanActivate{
   constructor(private router: Router, private authService: AuthService) { }
 
   canActivate() {
-    const currentUser = this.authService.currentUserValue;
-    if (currentUser) {
+    if (this.authService.isLoggedIn()) {
       return true;
     }
 

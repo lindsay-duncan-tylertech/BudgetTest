@@ -12,7 +12,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
-    if (this.authService.currentUserValue) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
     }
    }

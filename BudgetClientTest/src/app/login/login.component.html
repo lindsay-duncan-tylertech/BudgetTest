@@ -5,30 +5,31 @@
       <form [formGroup]="loginForm"
             (ngSubmit)="login()">
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="username">Username</label>
           <input type="text"
                  class="form-control"
                  formControlName="userName">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="userName.touched && userName.errors?.required">
           This field is required
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="password">Password</label>
           <input type="password"
                  class="form-control"
                  formControlName="password">
         </div>
-        <div class="alert alert-danger"
+        <div class="alert alert-danger small fade show p-2"
              *ngIf="password.touched && password.errors?.required">
           This field is required
         </div>
 
         <button type="submit"
-                class="btn btn-primary">Login</button>
+                class="btn btn-primary"
+                [disabled]="!loginForm.valid">Login</button>
       </form>
     </div>
     <div class="col-lg-4"></div>

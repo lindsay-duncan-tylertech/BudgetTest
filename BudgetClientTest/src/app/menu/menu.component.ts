@@ -10,14 +10,11 @@ import { User } from '../models/User';
 })
 export class MenuComponent {
 
-  currentUser: User;
-
   constructor(private router: Router, private authService: AuthService){
-    this.authService.currentUser.subscribe(user => this.currentUser = user);
   }
 
   get isLoggedIn(): boolean {
-    return !!this.currentUser;
+    return this.authService.isLoggedIn();
   }
 
   logout() {

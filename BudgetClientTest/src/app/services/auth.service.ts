@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/User';
-import { map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,34 +11,35 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   private loginPath = `${environment.apiUrl}/identity/login`;
   private registerPath = `${environment.apiUrl}/identity/register`;
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
   login(data) {
     return this.http.post<any>(this.loginPath, data)
-      .pipe(map(user => {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-      }))
+      .pipe((tap(this.setSession)));
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    localStorage.removeItem('user');
   }
 
   register(data): Observable<any> {
     return this.http.post(this.registerPath, data);
   }
 
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
+  public isLoggedIn() {
+    let user = localStorage.getItem('user');
+
+    if (user != null) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private setSession(authResult) {
+    localStorage.setItem('user', JSON.stringify(authResult));
   }
 
 }
